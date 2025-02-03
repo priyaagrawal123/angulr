@@ -1,0 +1,80 @@
+<div>
+    <!-- Navbar -->
+  
+    <!-- Hero Section -->
+    <div class="flex flex-col items-center justify-center py-16">
+      <h1 class="text-4xl font-bold text-center text-blue-600 mb-6">
+        Welcome to Library Management System!
+      </h1>
+  
+      <!-- Search Input and Button -->
+      <div class="max-w-3xl mx-auto">
+        <div class="flex gap-4 items-center mb-6">
+          <input
+            type="text"
+            [(ngModel)]="searchQuery"
+            placeholder="Search for any Book or Author"
+            class="flex-grow p-3 rounded-md border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <button (click)="handleSearch()" class="shadow hover:bg-blue-600">
+            Search
+          </button>
+        </div>
+  
+        <!-- Loader on Initial Load -->
+        <div *ngIf="loading && searchResults.length === 0" class="text-center text-lg">
+          <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-600 mx-auto mb-4"></div>
+          Loading books...
+        </div>
+  
+        <!-- Display Results or Empty State -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mx-5">
+          <div *ngIf="searchResults.length === 0 && !loading" class="text-center text-lg text-gray-500">
+            No results found. Please try a different search term.
+          </div>
+          <div *ngFor="let book of searchResults; let i = index" 
+               class="p-4 bg-white rounded-md shadow border border-gray-200 cursor-pointer w-full"
+               (click)="handleBookClick(book)">
+              <div class="text-lg font-medium text-blue-600 hover:underline truncate">
+                {{ book.title || 'No Title Available' }}
+              </div>
+              <div class="text-gray-600 truncate">
+                {{ book.author_name?.join(', ') || 'Unknown Author' }}
+              </div>
+              <div class="text-gray-500">
+                First Published: {{ book.first_publish_year || 'Unknown Year' }}
+              </div>
+          </div>
+        </div>
+  
+        <!-- Skeleton Cards on Scroll -->
+        <div *ngIf="loading && searchResults.length > 0" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mx-5">
+          <div *ngFor="let _ of [].constructor(4); let idx = index" class="bg-gray-300 rounded-lg p-4">
+            <div class="w-full h-8 bg-gray-400 rounded mb-4"></div>
+            <div class="w-3/4 h-6 bg-gray-400 rounded mb-2"></div>
+            <div class="w-1/2 h-6 bg-gray-400 rounded"></div>
+          </div>
+        </div>
+  
+        <!-- No More Data Message -->
+        <div *ngIf="!hasMore && !loading && searchResults.length > 0" class="text-center text-lg text-gray-500">
+          No more books to load.
+        </div>
+      </div>
+    </div>
+  
+    <!-- Book Details Popup -->
+    <div *ngIf="selectedBook" class="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-50">
+      <div class="bg-white p-6 rounded-lg w-96">
+        <h2 class="text-2xl font-bold text-blue-600">
+          {{ selectedBook.title }}
+        </h2>
+        <p class="text-lg mt-2"><strong>Author(s):</strong> {{ selectedBook.author_name?.join(', ') || 'Unknown Author' }}</p>
+        <p class="text-lg mt-2"><strong>First Published:</strong> {{ selectedBook.first_publish_year || 'Unknown Year' }}</p>
+        <button (click)="handleClosePopup()" class="mt-4 w-full bg-red-600 hover:bg-red-700">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+  
