@@ -1,0 +1,85 @@
+<div class="p-4">
+    <h1 class="text-3xl text-blue-800 font-bold mb-24 text-center">Manage Authors</h1>
+    <div class="flex justify-end -mb-12">
+      <button
+        (click)="openPopup()"
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Add Author
+      </button>
+    </div>
+  
+    <!-- Table of authors -->
+    <table class="min-w-full bg-white shadow-md rounded mt-14">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="px-4 py-2 text-left">Name</th>
+          <th class="px-4 py-2 text-left">Bio</th>
+          <th class="px-4 py-2 text-left">Published Year</th>
+          <th class="px-4 py-2 text-left">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let author of authors" class="border-b">
+          <td class="px-4 py-2">{{ author.name }}</td>
+          <td class="px-4 py-2">{{ author.bio }}</td>
+          <td class="px-4 py-2">{{ author.year }}</td>
+          <td class="px-4 py-2">
+            <button
+              (click)="openPopup(author)"
+              class="text-blue-500 hover:text-blue-700 mr-2"
+            >
+              Edit
+            </button>
+            <button
+              (click)="handleDelete(author.id)"
+              class="text-red-500 hover:text-red-700"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Popup for adding/editing author -->
+    <div *ngIf="showPopup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div class="bg-white p-6 rounded shadow-lg w-96">
+        <h3 class="text-xl font-semibold mb-4">
+          {{ isEditing ? 'Edit Author' : 'Add Author' }}
+        </h3>
+        <input
+          type="text"
+          [(ngModel)]="newAuthor.name"
+          placeholder="Author Name"
+          class="border p-2 rounded mb-4 w-full"
+        />
+        <textarea
+          [(ngModel)]="newAuthor.bio"
+          placeholder="Author Bio"
+          class="border p-2 rounded mb-4 w-full"
+        ></textarea>
+        <input
+          type="text"
+          [(ngModel)]="newAuthor.year"
+          placeholder="Published Year"
+          class="border p-2 rounded mb-4 w-full"
+        />
+        <div class="flex justify-end">
+          <button
+            (click)="closePopup()"
+            class="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+          >
+            Cancel
+          </button>
+          <button
+            (click)="handleSave()"
+            class="bg-blue-500 text-white px-4 py-2 rounded"
+          >
+            {{ isEditing ? 'Update Author' : 'Add Author' }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
